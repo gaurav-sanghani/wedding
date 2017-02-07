@@ -1,0 +1,81 @@
+body {
+    /* for scrollspy */
+    position: relative;
+}
+
+#navbar {
+    background-color:white;
+    background-image: unset;
+    font-family:'Poiret One', cursive;
+    font-size:25px;
+    font-weight:bold;
+    padding-bottom:5px;
+}
+
+@media (max-width: 1000px) {
+    #navbar {
+	/* to prevent the navbar from spilling onto a second line */
+	font-size: 15px;
+    }
+}
+
+#navbar > .container {
+    background-color: white;
+    padding-top:2%;
+}
+
+#navbar ul {
+    /* to let the navbar items take up the full navbar width */
+    float: none;
+}
+
+/* when we are larger than a mobile view */
+@media (min-width: 795px) {
+    /* effectively border-bottom showing up only on hover.
+     * Only do this because border bottom was causing some weird resizing that was annoying
+     */
+    #navbar ul > li > div {
+	visibility: hidden;
+	width: 100%;
+	height: 1px;
+	background-color: #b29ddc;
+	margin-top:-3px;
+    }
+
+    #navbar ul > li:hover > div, #navbar ul > li.active > div  {
+	visibility: visible;
+    }
+
+    /* Overwrite the default scroll spy css in bootstrap. */
+    #navbar ul > li.active > a {
+	background-color: unset;
+	background-image: unset;
+	box-shadow: unset;
+    }
+}
+
+#navbar .navbar-brand, #navbar ul > li {
+    margin-left:2.25%;
+    margin-right:2.25%;
+}
+
+#container {
+    margin:0 auto;
+    width:100%;
+    height:100%;
+}
+
+.cover {
+    background-attachment:fixed;
+    background-image:url('/imgs/cover_3200x1784.jpeg');
+    background-position: 80%;
+    background-repeat:no-repeat;
+    background-size:cover;
+    margin: 0 auto;
+}
+
+.content {
+    border:1px solid grey;
+    width:100%;
+    height:100%;
+}
