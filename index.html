@@ -3,8 +3,7 @@
     <meta charset="UTF-8">
     <meta property="og:image" content="/imgs/cover_3200x1784.jpg" />
 
-    <!-- jquery -->
-    <script src="https://code.jquery.com/jquery-3.1.1.js" integrity="sha256-16cdPddA6VdVInumRGo6IbivbERE8p7CQR3HzTBuELA=" crossorigin="anonymous"></script>
+    <link href="https://fonts.googleapis.com/css?family=Poiret+One" rel="stylesheet">
 
     <!-- Latest compiled and minified CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
@@ -12,15 +11,17 @@
     <!-- Optional theme -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
 
+    <!-- jquery -->
+    <script src="https://code.jquery.com/jquery-3.1.1.js" integrity="sha256-16cdPddA6VdVInumRGo6IbivbERE8p7CQR3HzTBuELA=" crossorigin="anonymous"></script>
+
     <!-- Latest compiled and minified JavaScript -->
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
     
-    <link href="https://fonts.googleapis.com/css?family=Poiret+One" rel="stylesheet">
     <link href="css/style.css" rel="stylesheet" type="text/css">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gaurav and Radhika's Wedding</title>
   </head>
-  <body data-spy="scroll" data-target="#navbar-items">
+  <body>
     <nav class="navbar navbar-default navbar-fixed-top" id="navbar">
       <div class="container">
 	<div class="navbar-header">
@@ -30,27 +31,46 @@
 	    <span class="icon-bar"></span>
 	    <span class="icon-bar"></span>
 	  </button>
-	  <a class="navbar-brand" href="#main">Brand</a>
+	  <a class="navbar-brand" href="#main">G&amp;R</a>
 	</div>
 	<div class="collapse navbar-collapse" id="navbar-items">
 	  <ul class="nav navbar-nav">
-	    <li><a href="#story">Our Story</a><div></div></li>
-	    <li><a href="#proposal">The Proposal</a><div></div></li>
+	    <!--<li><a href="#story">Our Story</a><div></div></li>
+	    <li><a href="#proposal">The Proposal</a><div></div></li>-->
 	    <li><a href="#wedding">The Wedding</a><div></div></li>
+	    <!--
 	    <li><a href="#rsvp">RSVP</a><div></div></li>
 	    <li><a href="#gifts">Gifts</a><div></div></li>
+	    -->
 	  </ul>
 	</div>
       </div>
     </nav>
-    <div class="container" id="container">
-      <div id="main" class="cover content"></div>
-      <div id="story" class="content"></div>
+    <div id="container">
+      <div id="main" class="cover"></div>
+      <!--
+      <div id="story" class="container"></div>
       <div id="proposal" class="content"></div>
-      <div id="wedding" class="content"></div>
       <div id="rsvp" class="content"></div>
       <div id="gifts" class="content"></div>
+      -->
+      <div id="wedding" class="container">
+	<div class="row">
+	  <div class="col-sm-8 col-sm-offset-2 grey-background">
+	    <div class="col-sm-9">
+	      <p class="wedding-blurb">
+		Welcome to our wedding website! We're still in the planning stages for our big day, but we know for sure that we want to have our wedding sometime mid-to-late February 2018, so mark your calendars!
+	      </p>
+	    </div>
+	    <div class="col-sm-3 time-to-wedding">
+	      <h4 style="margin-bottom: 0px;">Months to February 2018</h4>
+	      <div></div>
+	    </div>
+	  </div>
+	</div>
+      </div>
     </div>
+    <div id="footer"></div>
     <script src="/js/main.js" type="text/javascript"></script>
   </body>
 </html>
