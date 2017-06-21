@@ -103,8 +103,11 @@ body {
 
 .wedding-blurb {
     font-size: 20px;
-    padding-top: 10px;
-    padding-bottom: 10px;
+    text-align: center;
+}
+
+.countdown-header {
+    margin-bottom: 0px;
 }
 
 .time-to-wedding {
@@ -117,8 +120,12 @@ body {
 }
 
 .time-to-wedding > div {
-    font-size: 60px;
     color: #b29ddc;
+    font-size: 30px;
+}
+
+div.countdown {
+    font-size: 60px;
 }
 
 
