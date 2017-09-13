@@ -1,8 +1,65 @@
-body {
-    /* for scrollspy */
-    position: relative;
-    font-family:'Poiret One', cursive;
-    font-weight: bold;
+/******
+ * General
+ *****/
+.section-heading {
+  color: #777;
+  text-align: center;
+}
+
+.section-heading > .glyphicon {
+  font-size: 25px;
+}
+
+.section-heading > h1 {
+  margin-top: 10px;
+}
+
+.section {
+  background-color: white;
+  font-family: 'Helvetica Neue';,Helvetica,Arial,sans-serif;
+  font-weight: normal;
+  padding-top: 20px;
+  padding-bottom: 20px;
+  position: relative;
+  z-index: 10;
+}
+
+.section-gray {
+  background-color: #f6f6f6;
+  color:#777;
+}
+.section-gray a {
+  color: #85bceb !important;
+}
+
+.list-group {
+  margin-top: 20px;
+  max-width: 300px;
+}
+
+.list-group-item a {
+  display: block;
+  width: 100%;
+}
+
+.divider-div {
+  border-top:1px solid #777;
+  border-bottom:1px solid #777;
+  height:15px;
+  margin:15px 0;
+  width:100%;
+}
+
+.dropdown-toggle {
+  display: inline-block;
+}
+
+/******
+ * Font Settings
+ *****/
+.nav > li, .navbar-brand, h1, #welcome-heading {
+  font-family:'Poiret One', 'Helvetica Neue';,Helvetica,Arial,sans-serif;
+  font-weight: bold;
 }
 
 /******
@@ -10,56 +67,48 @@ body {
  ******/
 
 #navbar {
-    background-color:white;
-    background-image: unset;
-    font-size:25px;
-    padding-bottom:5px;
+  background-color:white;
+  background-image: unset;
+  font-size:25px;
+  padding-bottom:5px;
+  box-shadow: 0 3px 5px 0px #e7e7e7;
 }
 
 @media (max-width: 1000px) {
-    #navbar {
-	/* to prevent the navbar from spilling onto a second line */
-	font-size: 15px;
-    }
-}
-
-#navbar > .container {
-    background-color: white;
+  #navbar {
+    /* to prevent the navbar from spilling onto a second line */
+    font-size: 15px;
+  }
 }
 
 #navbar ul {
-    /* to let the navbar items take up the full navbar width */
-    float: none;
+  /* to let the navbar items take up the full navbar width */
+  float: none;
 }
 
 /* when we are larger than a mobile view */
 @media (min-width: 795px) {
-    /* effectively border-bottom showing up only on hover.
-     * Only do this because border bottom was causing some weird resizing that was annoying
-     */
-    #navbar ul > li > div {
-	visibility: hidden;
-	width: 100%;
-	height: 1px;
-	background-color: #b29ddc;
-	margin-top:-3px;
-    }
+  /* effectively border-bottom showing up only on hover.
+   * Only do this because border bottom was causing some weird resizing that was annoying
+   */
+  #navbar ul > li > div {
+    visibility: hidden;
+    width: 100%;
+    height: 1px;
+    background-color: #b29ddc;
+    margin-top:-3px;
+  }
 
-    #navbar ul > li:hover > div, #navbar ul > li.active > div  {
-	visibility: visible;
-    }
+  #navbar ul > li:hover > div, #navbar ul > li.active > div  {
+    visibility: visible;
+  }
 
-    /* Overwrite the default scroll spy css in bootstrap. */
-    #navbar ul > li.active > a {
-	background-color: unset;
-	background-image: unset;
-	box-shadow: unset;
-    }
-}
-
-#navbar .navbar-brand, #navbar ul > li {
-    margin-left:2.25%;
-    margin-right:2.25%;
+  /* Overwrite the default scroll spy css in bootstrap. */
+  #navbar ul > li.active > a {
+    background-color: unset;
+    background-image: unset;
+    box-shadow: unset;
+  }
 }
 
 /*****
@@ -67,103 +116,216 @@ body {
  *****/
 
 #container {
-    width:100%;
+  width:100%;
 }
 
 .cover {
-    background-attachment:fixed;
-    background-position: 80%;
-    background-repeat:no-repeat;
-    background-size:cover;
-    margin: 0 auto;
-    width:100%;
-    height:100%;
+  background-attachment:fixed;
+  background-position: 80%;
+  background-repeat:no-repeat;
+  background-size:cover;
+  margin: 0 auto;
+  width:100%;
+  height:100%;
 }
 
-@media (max-width: 800px) {
-    .cover {
-	background-image:url('../imgs/cover/ldpi-cover.jpg');
-    }
+#welcome-heading {
+  position: absolute;
+  top: 30px;
+  width: 100%;
+  text-align: center;
+  color: #9b4098;
+  padding: 20px;
+  font-size: 15px;
 }
 
-@media (min-width: 801px) and (max-width: 1280px) {
-    .cover {
-	background-image:url('../imgs/cover/mdpi-cover.jpg');
-    }
+#welcome-heading > h1 {
+  font-size: 15px;
+  font-weight: bold;
+  border: 1px solid #9b4098;
+  border-right: unset;
+  border-left: unset;
+  padding: 1%;
+  margin-left: 4em;
+  margin-right: 4em;
+  margin-bottom: .4em;
+}
+
+#welcome-heading > div {
+  font-size: .75em;
+}
+
+@media (max-width: 600px) {
+  .cover {
+     background-image:url('../imgs/cover/ldpi-cover.jpg');
+  }
+}
+
+@media (min-width: 600px) {
+  #welcome-heading {
+    position: fixed;
+    top: 15%;
+    left: 50px;
+    width: 35%;
+  }
+
+  #welcome-heading > h1 {
+    padding: 15px;
+    font-size: 40px;
+    margin-left: unset;
+    margin-right: unset;
+  }
+
+  #welcome-heading > div {
+    font-size: 16px;
+  }
+}
+
+@media (min-width: 601px) and (max-width: 1280px) {
+  .cover {
+     background-image:url('../imgs/cover/mdpi-cover.jpg');
+  }
 }
 
 @media (min-width: 1281px) and (max-width: 1620px) {
-    .cover {
-	background-image:url('../imgs/cover/hdpi-cover.jpg');
-    }
+  .cover {
+     background-image:url('../imgs/cover/hdpi-cover.jpg');
+  }
 }
 
 @media (min-width: 1621px) {
-    .cover {
-	background-image:url('../imgs/cover/xhdpi-cover.jpg');
-    }
-}
-
-.purple {
-    color: #b29ddc;
-}
-
-.grey-background {
-    background-color: #f6f6f6;
+  .cover {
+     background-image:url('../imgs/cover/xhdpi-cover.jpg');
+  }
 }
 
 
-/******
- * Wedding Info
+/*******
+ * Accommodations
+ *******/
+
+/*******
+ * Travel
+ *******/
+
+#travel .expandable-section > h3 {
+  margin: 0;
+}
+
+#travel .expandable-section .glyphicon {
+  top: 2px;
+}
+
+#travel .expandable-section-details > .act-as-margin {
+  margin-top: 30px;
+}
+
+#driving .address-block {
+  background-color:white;
+  max-width:250px;
+  text-align:center;
+}
+
+#flying li {
+  margin-top: 5px;
+}
+
+
+/*******
+ * Thanks
+ * Last panel on the page
  ******/
 
-#wedding > .row {
-    margin-top: 5%;
+#thanks {
+  background-attachment: fixed;
+  background-image: url('../imgs/walking-on-the-beach.jpg');
+  background-position: 25%;
+  background-repeat: no-repeat;
+  background-size: cover;
+  color: #fff;
+  font-family: 'Poiret One';
+  font-size: 30px;
+  font-weight: bold;
+  height: 80%;
+  text-align: center;
+  width: 100%;
 }
 
-.wedding-blurb {
-    font-size: 20px;
-    text-align: center;
+#thanks > div {
+  padding-top: 10%;
 }
 
-.countdown-header {
-    margin-bottom: 0px;
+#thanks .glyphicon-heart-empty {
+  color: red;
+  margin: 0px 4px 0 0px;
 }
-
-.time-to-wedding {
-    text-align: center;
-}
-
-.time-to-wedding > h4 {
-    margin-bottom: 0px;
-    font-weight: bold;
-}
-
-.time-to-wedding > div {
-    color: #b29ddc;
-    font-size: 30px;
-}
-
-div.countdown {
-    font-size: 60px;
-}
-
 
 /*******
  * Footer
  *******/
 
 #footer {
-    height: 50px;
-    margin-top: 20px;
-    text-align: center;
-    width: 100%;
+  text-align: center;
+  width: 100%;
+  font-size: 12px;
+  margin-top: 5px;
+  margin-bottom: 10px;
 }
 
-#footer {
-    font-size: 12px;
+#copyright-year-container {
+  margin-top: -10px;
 }
 
 #footer > img {
-    height: 30px;
+  height: 30px;
+}
+
+
+/******
+ * Utilities
+ * They override everything else
+ ******/
+.light-purple {
+  color: #b29ddc;
+}
+
+.strong-purple {
+  color: #682fda;
+}
+
+.radhika-purple {
+  color: #9b4098;
+}
+
+.grey-background {
+  background-color: #f6f6f6;
+}
+
+.blue {
+  color: #85bceb;
+}
+
+.clickable {
+  cursor: pointer;
+}
+
+.rotate-normal {
+  transform: rotate(0deg);
+  transition: transform 0.5s ease;
+}
+
+.rotate-reverse {
+  transform: rotate(180deg);
+  transition: transform 0.5s ease;
+}
+
+.slide-up {
+  overflow: hidden;
+  height: 0;
+  transition: height 0.75s ease;
+}
+
+.asterisk-danger {
+  color: red;
+  margin-left: 5px;
 }
