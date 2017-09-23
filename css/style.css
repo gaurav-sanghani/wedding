@@ -230,6 +230,53 @@
   margin-top: 5px;
 }
 
+/*******
+ * Countdown
+ ******/
+#countdown {
+  background-image: url('../imgs/hearts.jpg');
+  background-attachment: fixed;
+  background-repeat: no-repeat;
+  background-size: cover;
+  height: 50%;
+  background-position: bottom;
+  padding: 0;
+}
+
+#countdown > div {
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.37);
+}
+
+#countdown .whitebox {
+  margin: 0 auto;
+  text-align: center;
+  padding: 50px;
+  font-size: 30px;
+  font-weight: bold;
+  font-family: 'Poiret One', 'Helvetica Neue';
+  max-width: 760px;
+  color: white;
+}
+
+#countdown .exclamation {
+  font-family: 'Helvetica Neue';
+  font-weight: normal;
+  font-size: 35px;
+  margin-left: 2px;
+}
+
+@media (min-width: 400px) {
+  #countdown > div {
+    padding-top: 7%;
+  }
+
+  #countdown .whitebox {
+    border: 5px solid white;
+  }
+}
+
 
 /*******
  * Thanks

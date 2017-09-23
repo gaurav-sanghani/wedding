@@ -34,25 +34,61 @@ $(document).ready(function () {
     });
   }
 
-  function countdown(nowTs) {
-    // Compute the # of months from now til the wedding!
-    function daysTil(startTs, endTs) {
-      return ((endTs - startTs) / (1000 * 60 * 60 * 24)) | 0; // force to int
+  function countdown(now) {
+    // number of days in each month
+    var daysInMonth = [31, now.getFullYear() % 4 ? 28 : 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+
+    // Compute the # of years, months, & days from now til the wedding!
+    // Assumption: start <= end
+    function timeTil(start, end) {
+      var months = start.getDate() <= end.getDate() ? 0 : -1;
+      var days = months ? daysInMonth[start.getMonth()] - start.getDate() + end.getDate() : end.getDate() - start.getDate();
+
+      months += Math.abs(start.getMonth() + 12 * start.getYear() - (end.getMonth() + 12 * end.getYear()));
+      var years = months / 12 | 0;
+      months = months - years * 12;
+      return {years: years, months: months, days: days};
     }
 
-    var WEDDING_START_TS = 1518847200000; //February 17, 2018 T00:00:00.000 CST
-    var days = daysTil(nowTs, WEDDING_START_TS);
-    var counter = $('.time-to-wedding div');
-    var countdownHeader = $('.countdown-header');
-    if (days > 0) {
-      counter.text(days);
-    } else if (days < 0) {
-      counter.text(days * -1);
-      countdownHeader.text("Days we've been married");
+    var WEDDING_START = new Date(1518847200000); //February 17, 2018 T00:00:00.000 CST
+    var weddingFuture = now.getTime() < WEDDING_START.getTime();
+    var timeTil = weddingFuture ? timeTil(now, WEDDING_START) : timeTil(WEDDING_START, now);
+
+    var pluralYears = timeTil.years === 1 ? '': 's';
+    var pluralMonths = timeTil.months === 1 ? '': 's';
+    var pluralDays = timeTil.days === 1 ? '': 's';
+
+    var timeleftCopy = [];
+    if (timeTil.years) {
+      timeleftCopy.push(timeTil.years + ' year' + pluralYears);
+    }
+
+    if (timeTil.months) {
+      timeleftCopy.push(timeTil.months + ' month' + pluralMonths);
+    }
+
+    if (timeTil.days) {
+      timeleftCopy.push(timeTil.days + ' day' + pluralDays);
+    }
+
+    var formattedCopy;
+    switch (timeleftCopy.length) {
+      case 1:
+        formattedCopy = timeleftCopy[0];
+        break;
+      case 2:
+        formattedCopy = timeleftCopy.join(' and ');
+        break;
+      case 3:
+        formattedCopy = timeleftCopy[0] + ', ' + timeleftCopy[1] + ', and ' + timeleftCopy[2];
+        break;
+    }
+
+    if (formattedCopy) {
+      var prefixText = weddingFuture ? 'We get married in ' : 'We have been married for ';
+      $('#time-left').text(prefixText + formattedCopy);
     } else {
-      countdownHeader.text('It is ' + (new Date()).toDateString());
-      counter.text('Today is the wedding!');
-      counter.removeClass('countdown');
+      $('#time-left').text('The wedding is today');
     }
   }
 
@@ -89,4 +125,8 @@ $(document).ready(function () {
   copyrightYear(now);
   handlePageLoadToHash();
   clickToOpenAnimations();
+
+
+  countdown(now);
+  window.countdown = countdown;
 });
