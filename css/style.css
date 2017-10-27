@@ -58,7 +58,7 @@
  * Font Settings
  *****/
 .nav > li, .navbar-brand, h1, #welcome-heading {
-  font-family:'Poiret One', 'Helvetica Neue';,Helvetica,Arial,sans-serif;
+  font-family:'Poiret One', 'Helvetica Neue',Helvetica,Arial,sans-serif;
   font-weight: bold;
 }
 
