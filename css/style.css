@@ -69,7 +69,7 @@
 #navbar {
   background-color:white;
   background-image: unset;
-  font-size:25px;
+  font-size:18px;
   padding-bottom:5px;
   box-shadow: 0 3px 5px 0px #e7e7e7;
 }
@@ -350,6 +350,10 @@
 
 .blue {
   color: #85bceb;
+}
+
+.grey {
+  color:#777;
 }
 
 .clickable {
