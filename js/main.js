@@ -119,6 +119,46 @@ $(document).ready(function () {
     });
   }
 
+  function RSVP() {
+    this.$submit = $('#rsvp-button');
+    this.$rsvpForm = $('#rsvp > .container').children();
+    this.$currentView = this.$rsvpForm;
+    this.$errorMsg =  $('#rsvp-error');
+
+    var self = this;
+    this.$submit.click(function (e) {
+      var data = self.collectInput();
+      $.ajax({
+        url: '/api/rsvp', method:'POST', data:data,
+        complete: function (jq) {
+          if (jq.status !== 200) {
+            self.$errorMsg.removeClass('hidden');
+            _scrollToEl('#rsvp');
+          } else {
+            self.$errorMsg.addClass('hidden');
+          }
+        }
+      });
+    });
+  }
+
+  RSVP.prototype.collectInput = function () {
+    var data = {};
+    this.$rsvpForm.find('input').each(function (i, el) {
+      var $el = $(el);
+      var name = $el.attr('name');
+      if ($el.attr('type') === 'checkbox') {
+        data[name] = $el.prop('checked');
+      } else {
+        data[name] = $el.val();
+      }
+    });
+
+    data.message = this.$rsvpForm.find('textarea').val();
+    console.log(data);
+    return data;
+  }
+
   navigationHandler();
 
   var now = new Date();
@@ -128,5 +168,6 @@ $(document).ready(function () {
 
 
   countdown(now);
-  window.countdown = countdown;
+
+  new RSVP(); // setup bindings
 });

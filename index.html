@@ -63,6 +63,7 @@
             </li>
             <li><a class="internal-link" href="#registry">Registry</a><div></div></li>
             <li><a class="internal-link" href="#social-media">Social Media</a><div></div></li>
+            <li><a class="internal-link" href="#rsvp">RSVP</a></li>
           </ul>
         </div>
       </div>
@@ -76,6 +77,12 @@
               Horsehoe Bay Resort · Austin, TX
             </div>
             <div>17 FEBRUARY 2018</div>
+            <a href="#rsvp" class="btn btn-default btn-lg internal-link" style="
+    margin-top: 20px;
+    background-color: #9b4098;
+    color: white;
+    font-weight: bold;
+">RSVP</a>
         </div>
       </div>
       <div id="wedding" class="section">
@@ -284,6 +291,61 @@
             </div>
             <div>
               <span style="margin-right:5px;">🌺</span><i>#AlohaToAchari</i>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div id="rsvp" class="section section-gray">
+        <div class="container">
+          <div class="section-heading">
+            <span class="glyphicon glyphicon-envelope light-purple"></span>
+            <h1>RSVP</h1>
+            <div id="rsvp-error" style="margin-top:5px;" class="hidden text-danger">Uh-oh! Seems like something went wrong when you tried to RSVP. Please try again in a few minutes, or send an email to info@gauravlovesradhika.com</div>
+          </div>
+          <div class="row" style="margin-top: 20px;">
+            <div class="col-md-offset-3 col-md-4">
+              <label>Name</label>
+              <input name="name" placeholder="Gaurav &amp; Radhika Sanghani" type="text">
+            </div>
+            <div class="col-md-3">
+              <label>How many in your party?</label>
+              <input name="guestCount" placeholder="2" type="number">
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-offset-3 col-md-4">
+              <label>Email</label>
+              <input name="email" placeholder="info@gauravlovesradhika.com" type="text">
+            </div>
+            <div class="col-md-3">
+              <label>What events will you be attending?</label>
+              <div class="checkbox">
+                <label>
+                  <input type="checkbox" name="sangeet">Sangeet - February 16 @ 6:30pm
+                </label>
+              </div>
+              <div class="checkbox">
+                <label>
+                  <input type="checkbox" name="wedding">Wedding - February 17 @ 10:00am
+                </label>
+              </div>
+              <div class="checkbox">
+                <label>
+                  <input type="checkbox" name="reception">Reception - February 17 @ 7:00pm
+                </label>
+              </div>
+              <div class="checkbox" style="margin-top: 20px;">
+                <label>
+                  <input type="checkbox" name="decline">Sorry, we regretfully decline
+                </label>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-offset-3 col-md-6">
+              <label>Message to the couple</label>
+              <textarea name="message" placeholder="Congratulations ..."></textarea>
+              <button id="rsvp-button" class="btn btn-lg center-block" style="margin-top: 30px;font-weight: lighter;background-color: #b29ddc;color: white;">Submit</button>
             </div>
           </div>
         </div>
