@@ -124,19 +124,23 @@ $(document).ready(function () {
     this.$rsvpForm = $('#rsvp > .container').children();
     this.$currentView = this.$rsvpForm;
     this.$errorMsg =  $('#rsvp-error');
+    this.$specificRsvpError = $('#specific-rsvp-error');
 
     var self = this;
     this.$submit.click(function (e) {
+      self.$submit.attr('disabled', 1);
       var data = self.collectInput();
       $.ajax({
         url: '/api/rsvp', method:'POST', data:data,
         complete: function (jq) {
           if (jq.status !== 200) {
+            console.log(jq);
             self.$errorMsg.removeClass('hidden');
             _scrollToEl('#rsvp');
           } else {
             self.$errorMsg.addClass('hidden');
           }
+          self.$submit.attr('disabled', 0);
         }
       });
     });
@@ -148,7 +152,7 @@ $(document).ready(function () {
       var $el = $(el);
       var name = $el.attr('name');
       if ($el.attr('type') === 'checkbox') {
-        data[name] = $el.prop('checked');
+        data[name] = $el.prop('checked') ? 1 : 0;
       } else {
         data[name] = $el.val();
       }
