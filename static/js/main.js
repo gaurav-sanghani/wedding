@@ -123,37 +123,66 @@ $(document).ready(function () {
     this.$submit = $('#rsvp-button');
     this.$rsvpForm = $('#rsvp > .container').children();
     this.$currentView = this.$rsvpForm;
-    this.$errorMsg =  $('#rsvp-error');
+    this.$rsvpError =  $('#rsvp-error');
+    this.$rsvpSuccess = $('#rsvp-success');
     this.$specificRsvpError = $('#specific-rsvp-error');
 
     var self = this;
     this.$submit.click(function (e) {
-      self.$submit.attr('disabled', 1);
+      e.preventDefault();
+      
+      self.$submit.prop('disabled', true);
       var data = self.collectInput();
+      self.myRsvp = data;
+
+      var method = 'POST';
+      var path = '/api/rsvp';
       $.ajax({
-        url: '/api/rsvp', method:'POST', data:data,
-        complete: function (jq) {
-          if (jq.status !== 200) {
-            console.log(jq);
-            self.$errorMsg.removeClass('hidden');
-            _scrollToEl('#rsvp');
-          } else {
-            self.$errorMsg.addClass('hidden');
-          }
-          self.$submit.attr('disabled', 0);
+        url:path, method:method, data:data
+      }).fail(function (jqXhr) {
+        var response = jqXhr.responseJSON;
+        var errs = {};
+        if (response) {
+          self.rsvpHash = response.rsvpHash;
+          errs = response.err_msg;
         }
+
+        self.showError(errs);
+        _scrollToEl('#rsvp');
+      }).done(function (response) {
+        self.showSuccess();
+        _scrollToEl('#rsvp');
+      }).always(function () {
+        self.$submit.prop('disabled', false);
       });
     });
-  }
+  };
+
+  RSVP.prototype.showError = function (errorMsgs) {
+    this.$specificRsvpError.html('');
+
+    for (var key in errorMsgs) {
+      var errorMsg = $('<div>').text(errorMsgs[key]);
+      this.$specificRsvpError.append(errorMsg);
+    }
+
+    this.$rsvpError.removeClass('hidden');
+    this.$rsvpSuccess.addClass('hidden');
+  };
+
+  RSVP.prototype.showSuccess = function () {
+    this.$rsvpError.addClass('hidden');
+    this.$rsvpSuccess.removeClass('hidden');
+  };
 
   RSVP.prototype.collectInput = function () {
     var data = {};
     this.$rsvpForm.find('input').each(function (i, el) {
       var $el = $(el);
-      var name = $el.attr('name');
-      if ($el.attr('type') === 'checkbox') {
+      var name = $el.prop('name');
+      if ($el.prop('type') === 'checkbox') {
         data[name] = $el.prop('checked') ? 1 : 0;
-      } else {
+      } else if ($el.prop('type') !== 'radio' || $el.prop('checked')) {
         data[name] = $el.val();
       }
     });
@@ -161,7 +190,7 @@ $(document).ready(function () {
     data.message = this.$rsvpForm.find('textarea').val();
     console.log(data);
     return data;
-  }
+  };
 
   navigationHandler();
 

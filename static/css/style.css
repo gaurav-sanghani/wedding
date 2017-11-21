@@ -282,24 +282,19 @@
  * RSVP
  ******/
 
-#rsvp .row {
-  margin-top: 20px;
-}
-
 #rsvp label {
-  margin-top:20px;
+  margin-top: 30px;
 }
 
-#rsvp div.checkbox > label {
+#rsvp div.checkbox > label, #rsvp div.radio > label {
   margin-top:0px;
 }
 
-#rsvp input[type="text"], #rsvp input[type="number"], #rsvp textarea {
+#rsvp input[type="text"], #rsvp input[type="number"], #rsvp input[type="email"], #rsvp textarea {
   width: 100%;
   border-style: none;
   background-color: transparent;
   border-bottom: 1px solid #b29ddc;
-  margin-top: 10px;
   padding-bottom: 10px;
   font-size: 15px;
   display: inline-block;
@@ -315,6 +310,10 @@
 
 #rsvp label {
   margin-bottom: 0;
+}
+
+#rsvp .radio {
+  margin:0;
 }
 
 /*******
