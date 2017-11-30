@@ -1,7 +1,6 @@
 import server.models.rsvp as rsvp
 import flask
 
-
 app = flask.Flask(__name__)
 
 def strToBool(data):
@@ -14,9 +13,9 @@ def strToNum(data):
   try:
     return int(cleanStr(data))
   except:
-    return None
+    return 0
 
-@app.route('/api/rsvp', methods=['POST', 'PATCH'])
+@app.route('/api/rsvp', methods=['POST'])
 def saveRsvp():
   request_data = flask.request.form
   if not request_data:
@@ -30,12 +29,13 @@ def saveRsvp():
   }
   fields = {
     'name': cleanStr,
-    'guestCount': strToNum,
+    'adultCount': strToNum,
+    'childCount': strToNum,
     'email': cleanStr,
     'decline': strToBool,
     'message': cleanStr,
     'food': cleanStr,
-    'rsvpHash': cleanStr,
+    'guestHash': cleanStr,
     **event_fields,
   }
 
@@ -45,8 +45,10 @@ def saveRsvp():
   is_veg = data.get('food') != 'nonVeg'
 
   params = (
+    data.get('guestHash'),
     data.get('name'),
-    data.get('guestCount'),
+    data.get('adultCount'),
+    data.get('childCount'),
     data.get('email'),
     is_attending,
     is_veg,
@@ -54,11 +56,7 @@ def saveRsvp():
     data.get('message')
   )
 
-  if flask.request.method == 'PATCH' and data.get('rsvpHash'):
-    success, err_msg = rsvp.update(*params, rsvpHash=data['rsvpHash'])
-  else:
-    success, err_msg = rsvp.save(*params)
-
+  success, err_msg = rsvp.save(*params)
   response = flask.jsonify(err_msg=err_msg, rsvpHash=success)
   if err_msg:
     response.status_code = 400
@@ -67,6 +65,22 @@ def saveRsvp():
   else:
     response.status_code = 500
   return response
+
+@app.route('/api/rsvp', methods=['GET'])
+def searchRsvps():
+  name = flask.request.args.get('name', '').strip()
+  if not name:
+    return '', 400, None
+  if len(name) < 2:
+    response = flask.jsonify(err_msg=['Must enter at least 3 letters'])
+    response.status_code = 400
+    return response
+
+  results = rsvp.search(n.strip() for n in name.split(' '))
+  if results:
+   return flask.jsonify(results=results)
+  else:
+    return '', 400, None
 
 
 if __name__ == '__main__':

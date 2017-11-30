@@ -119,78 +119,329 @@ $(document).ready(function () {
     });
   }
 
-  function RSVP() {
+  function Rsvp() {
     this.$submit = $('#rsvp-button');
-    this.$rsvpForm = $('#rsvp > .container').children();
-    this.$currentView = this.$rsvpForm;
     this.$rsvpError =  $('#rsvp-error');
     this.$rsvpSuccess = $('#rsvp-success');
     this.$specificRsvpError = $('#specific-rsvp-error');
 
+    this.curStage = 0;
+    var boundNext = this.next(), boundError = this.showError(), boundSuccess = this.showSuccess();
+    var rsvpSearch = new RsvpSearch($('#rsvp-search'), boundError, boundSuccess, boundNext);
+    var rsvpForm = new RsvpForm($('#rsvp-form'), boundError, boundSuccess, boundNext);
+    this.stages = [rsvpSearch, rsvpForm];
+
+    this.$submit.click(this.onSubmit());
+  };
+
+  Rsvp.prototype.onSubmit = function () {
     var self = this;
-    this.$submit.click(function (e) {
+    return function (e) {
       e.preventDefault();
-      
       self.$submit.prop('disabled', true);
-      var data = self.collectInput();
-      self.myRsvp = data;
 
-      var method = 'POST';
-      var path = '/api/rsvp';
-      $.ajax({
-        url:path, method:method, data:data
-      }).fail(function (jqXhr) {
-        var response = jqXhr.responseJSON;
-        var errs = {};
-        if (response) {
-          self.rsvpHash = response.rsvpHash;
-          errs = response.err_msg;
-        }
-
-        self.showError(errs);
-        _scrollToEl('#rsvp');
-      }).done(function (response) {
-        self.showSuccess();
-        _scrollToEl('#rsvp');
-      }).always(function () {
+      var currentStage = self.stages[self.curStage];
+      var promise = currentStage.onSubmit(e);
+      if (promise) {
+        promise.always(function () {
+          self.$submit.prop('disabled', false);
+        });
+      } else {
         self.$submit.prop('disabled', false);
-      });
+      }
+    }
+  };
+
+  Rsvp.prototype.showError = function () {
+    var self = this;
+    return function (errorMsgs) {
+      self.$specificRsvpError.empty();
+      if (!errorMsgs.length) {
+        errorMsgs = ['Please try again in a few minutes, or send an email to info@gauravlovesradhika.com'];
+      }
+
+      for (var i = 0, len = errorMsgs.length; i < len; ++i) {
+        var errorMsg = $('<div>').text(errorMsgs[i]);
+        self.$specificRsvpError.append(errorMsg);
+      }
+
+      self.$rsvpError.removeClass('hidden');
+      self.$rsvpSuccess.addClass('hidden');
+      _scrollToEl('#rsvp-msg');
+    };
+  };
+
+  Rsvp.prototype.showSuccess = function () {
+    var self = this;
+    return function (msgs) {
+      self.$rsvpError.addClass('hidden');
+      self.$rsvpSuccess.empty();
+      for (var i = 0, len = msgs.length; i < len; ++i) {
+        var msg = $('<div>').text(msgs[i]);
+        self.$rsvpSuccess.append(msg);
+      }
+
+      self.$rsvpSuccess.removeClass('hidden');
+    };
+  };
+
+  Rsvp.prototype.next = function (guest) {
+    var self = this;
+    return function (guest) {
+      self.$rsvpError.addClass('hidden');
+      self.$rsvpSuccess.addClass('hidden');
+      self.stages[self.curStage].hide();
+      console.log(guest);
+
+      if (self.curStage + 1 < self.stages.length) {
+        ++self.curStage;
+        self.stages[self.curStage].show(guest);
+      } else {
+        self.showSuccess()(["Thank you!. Your RSVP for Gaurav & Radhika's wedding has been successfully saved"]);
+        self.$submit.hide();
+        setTimeout(function() {_scrollToEl('#rsvp-success');}, 0);
+      }
+    };
+  };
+
+
+  function RsvpForm($el, onError, showSuccess, next) {
+    this.$el = $el;
+    this.$adultCntMax = $("#adultCntMax");
+    this.$childCntMax = $("#childCntMax");
+    var fields = this.fields = {};
+    this.$el.find('input').each(function (i, input) {
+      var $input = $(input);
+      fields[$input.prop('name')] = $input;
+    });
+
+    fields.adultCount.change(this.enforceLimit('max_num_adults'));
+    fields.childCount.change(this.enforceLimit('max_num_children'));
+
+    this.events = ['sangeet', 'wedding', 'reception'];
+    this.onError = onError;
+    this.showSuccess = showSuccess;
+    this.next = next;
+  };
+
+  RsvpForm.prototype.enforceLimit = function (field) {
+    var self = this;
+    return function (e) {
+      var $input = $(e.target);
+      if ($input.val() > self.guest[field] || $input.val() < 0) {
+        $input.siblings('label').addClass('text-danger');
+        $input.val(self.guest[field]);
+      } else {
+        $input.siblings('label').removeClass('text-danger');
+      }
+    };
+  };
+
+  RsvpForm.prototype.onSubmit = function (e) {
+    var data = this.collectInput(this.$el);
+    if (!this.validate(data)) {
+      return false;
+    }
+
+    data.guestHash = this.guest.hash;
+
+    return $.ajax({
+      url:'/api/rsvp', method:'POST', data:data, context:this
+    }).fail(function (jqXhr) {
+      var response = jqXhr.responseJSON;
+      var errs = [];
+      if (response) {
+        this.rsvpHash = response.rsvpHash;
+        errs = response.err_msg;
+      }
+
+      this.onError(errs);
+    }).done(function () {
+      this.next();
     });
   };
 
-  RSVP.prototype.showError = function (errorMsgs) {
-    this.$specificRsvpError.html('');
-
-    for (var key in errorMsgs) {
-      var errorMsg = $('<div>').text(errorMsgs[key]);
-      this.$specificRsvpError.append(errorMsg);
+  RsvpForm.prototype.validate = function (data) {
+    var errors = [];
+    if (!data.name) {
+      errors.push('Missing name');
+    } else if (data.name.length < 2) {
+      errors.push('Name does not look valid. Please submit your full name');
     }
 
-    this.$rsvpError.removeClass('hidden');
-    this.$rsvpSuccess.addClass('hidden');
-  };
+    if (!data.decline) {
+      if (!data.adultCount) {
+        errors.push('Please RSVP with the number of guests');
+      } else if (data.adultCount > this.guest.max_num_adults) {
+        errors.push('Please limit your RSVP to ' + this.guest.max_num_adults + ' adults');
+      }
 
-  RSVP.prototype.showSuccess = function () {
-    this.$rsvpError.addClass('hidden');
-    this.$rsvpSuccess.removeClass('hidden');
-  };
+      if (data.childCount > this.guest.max_num_children) {
+        errors.push('Please limit your RSVP to ' + this.guest.max_num_children + ' children');
+      }
 
-  RSVP.prototype.collectInput = function () {
+      if (!data.food) {
+        errors.push('Please select whether you are Vegetarian or not');
+      }
+    }
+
+    var count = 0;
+    for (var i = 0, len = this.events.length; i < len; ++i) {
+      var rsvp = data[this.events[i]];
+      if (rsvp) {
+        count++;
+      }
+    }
+
+    if (!(count ^ data.decline)) {
+      errors.push('You must choose to either decline or attend')
+    }
+
+    if (errors.length) {
+      this.onError(errors);
+      return false;
+    }
+
+    return true;
+  }
+
+  RsvpForm.prototype.collectInput = function ($form) {
     var data = {};
-    this.$rsvpForm.find('input').each(function (i, el) {
+    $form.find('input').each(function (i, el) {
       var $el = $(el);
       var name = $el.prop('name');
       if ($el.prop('type') === 'checkbox') {
         data[name] = $el.prop('checked') ? 1 : 0;
       } else if ($el.prop('type') !== 'radio' || $el.prop('checked')) {
-        data[name] = $el.val();
+        data[name] = $el.val().trim();
       }
     });
 
-    data.message = this.$rsvpForm.find('textarea').val();
-    console.log(data);
+    data.message = $form.find('textarea').val().trim();
     return data;
   };
+
+  RsvpForm.prototype.show = function (guest) {
+    this.guest = guest;
+    if (!guest.max_num_adults) {
+      guest.max_num_adults = 1;
+    }
+
+    this.fields.name.val(guest.display_name);
+    var isPrevHidden = false;
+    for (var i = 0, len = this.events.length; i < len; ++i) {
+      var event = this.events[i];
+      if (guest['invited_to_' + event]) {
+        var $container = this.fields[event].parent().parent().show();
+        if (isPrevHidden) {
+          $container.css('margin-top', '5px');
+          isPrevHidden = false;
+        }
+      } else {
+        this.fields[event].parent().parent().hide().css('margin-top', '');
+        isPrevHidden = true;
+      }
+    }
+
+    this.$adultCntMax.text("(Max " + guest.max_num_adults + ")");
+    if (guest.max_num_children) {
+      this.$childCntMax.text("(Max " + guest.max_num_children + ")").parent().parent().show();
+    } else {
+      this.$childCntMax.parent().parent().hide();
+    }
+
+    this.$el.collapse('show');
+  };
+
+  RsvpForm.prototype.hide = function () {
+    this.$el.collapse('hide');
+  };
+
+
+  function RsvpSearch($el, onError, showSuccess, next) {
+    this.$el = $el;
+    this.$resultsContainer = $el.find('.container');
+    this.$input = $el.find('input[name="searchName"]');
+    this.errCallback = onError;
+    this.successCallback = showSuccess;
+    this.suggestions = [
+      'If none of them match, try the following',
+      '1) Try searching for your first & last names',
+      '2) Use a slightly different spelling (sorry!)',
+      '3) Email us directly at info@gauravlovesradhika.com'
+    ];
+
+    var self = this;
+    $el.on('click', '.guest-card', function (e) {
+      var hash = $(e.target).data('guest-hash');
+      var guest = null;
+      for (var i = 0, len = self.results.length; i < len; ++i) {
+        if (self.results[i].hash === hash) {
+          guest = self.results[i];
+          break;
+        }
+      }
+
+      if (!guest) {
+        onError(['Something went wrong. Please try again.']);
+      } else {
+        next(guest);
+      }
+    });
+  };
+
+  RsvpSearch.prototype.hide = function () {
+    this.$el.collapse('hide');
+  };
+
+  RsvpSearch.prototype.onSubmit = function (e) {
+    var searchName = this.$input.val().trim();
+    if (searchName.length < 3) {
+      if (searchName.length > 0) {
+        this.errCallback(['Please enter your full name.']);
+      }
+      return false;
+    }
+
+    return $.ajax({
+      url: '/api/rsvp', method:'GET', data:{name:searchName}, context:this
+    }).done(function (response) {
+      if (response && response.results && response.results.length) {
+        this.results = response.results;
+        this.askWhichGuest(response.results);
+        var addS = response.results.length === 1 ? '': 's';
+        var msgs = [
+          'Found ' + response.results.length + ' matching reservation' + addS + '. Please select yours.',
+        ].concat(this.suggestions);
+        this.successCallback(msgs);
+      }
+    }).fail(function (resp) {
+      this.errCallback(['Sorry, we were unable to find your RSVP'].concat(this.suggestions));
+    });
+  };
+
+  RsvpSearch.prototype.askWhichGuest = function (results) {
+    // Save rendering operations until we've added all the nodes
+    this.$resultsContainer.empty().addClass('hidden');
+
+    for (var i = 0, len = results.length; i < len; ++i) {
+      var guest = results[i];
+      $('<div>')
+        .text(guest.display_name)
+        .data('guest-hash', guest.hash)
+        .addClass('guest-card')
+        .appendTo(this.$resultsContainer);
+    }
+
+    this.$resultsContainer.removeClass('hidden');
+  };
+
+
+
+
+
+
+
 
   navigationHandler();
 
@@ -202,5 +453,5 @@ $(document).ready(function () {
 
   countdown(now);
 
-  new RSVP(); // setup bindings
+  new Rsvp(); // setup bindings
 });
