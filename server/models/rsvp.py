@@ -22,11 +22,11 @@ def execute_query(query, *args, **kwargs):
 INSERT_RSVP = """
 INSERT INTO rsvp (
     hash, name, num_adults, num_children, email, is_attending, is_veg, mehndi,
-    sangeet, wedding, reception, message, is_valid, guest_hash
+    sangeet, wedding, reception, message, is_valid, guest_id
 ) VALUES (
     encode(digest(concat(cast(current_timestamp as text), random()::text), 'sha512'), 'base64'),
     :name, :num_adults, :num_children, :email, :is_attending, :is_veg, :mehndi, :sangeet,
-    :wedding, :reception, :message, :is_valid, :guest_hash
+    :wedding, :reception, :message, :is_valid, :guest_id
 )
 RETURNING hash;
 """
@@ -70,13 +70,13 @@ def _validate(guest, name, num_adults, num_children, email, is_attending, is_veg
 
 def save(guest_hash, name, num_adults, num_children, email, is_attending, is_veg, events, message):
     guest = None
+    guest_id = None
     if guest_hash:
         try:
             guest = execute_query(LOOKUP_GUEST, hash=guest_hash).fetchone()
-            guest_hash = guest['hash']
+            guest_id = guest['id']
         except Exception as e:
             LOG.error(e)
-            guest_hash=None
 
     err_msgs = _validate(guest, name, num_adults, num_children, email, is_attending, is_veg, events, message)
 
@@ -96,7 +96,7 @@ def save(guest_hash, name, num_adults, num_children, email, is_attending, is_veg
             message=message.strip() or None,
             is_valid=not err_msgs,
             is_veg=is_veg,
-            guest_hash=guest_hash,
+            guest_id=guest_id,
         ).fetchone()
         if row_hash:
             success = row_hash[0]

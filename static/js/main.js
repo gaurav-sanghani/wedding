@@ -199,7 +199,7 @@ $(document).ready(function () {
       } else {
         self.showSuccess()(["Thank you!. Your RSVP for Gaurav & Radhika's wedding has been successfully saved"]);
         self.$submit.hide();
-        setTimeout(function() {_scrollToEl('#rsvp-success');}, 0);
+        setTimeout(function() {_scrollToEl('#rsvp');}, 0);
       }
     };
   };

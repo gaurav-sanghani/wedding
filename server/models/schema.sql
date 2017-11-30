@@ -3,7 +3,7 @@ CREATE EXTENSION pgcrypto;
 CREATE TABLE rsvp (
   id SERIAL PRIMARY KEY,
   hash text NOT NULL UNIQUE,
-  guest_hash text,
+  guest_id int,
   name text NOT NULL,
   num_adults int NOT NULL DEFAULT 0,
   num_children int NOT NULL DEFAULT 0,
@@ -29,7 +29,9 @@ CREATE TABLE guest (
   invited_to_mehndi boolean NOT NULL,
   invited_to_sangeet boolean NOT NULL,
   invited_to_wedding boolean NOT NULL,
-  invited_to_reception boolean NOT NULL
+  invited_to_reception boolean NOT NULL,
+  insert_ts timestamp without time zone NOT NULL DEFAULT NOW(),
+  delete_ts timestamp without time zone
 );
 
 CREATE TABLE name (
