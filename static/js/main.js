@@ -367,8 +367,7 @@ $(document).ready(function () {
     this.suggestions = [
       'If none of them match, try the following',
       '1) Try searching for your first & last names',
-      '2) Use a slightly different spelling (sorry!)',
-      '3) Email us directly at info@gauravlovesradhika.com'
+      '2) Email us directly at info@gauravlovesradhika.com'
     ];
 
     var self = this;
