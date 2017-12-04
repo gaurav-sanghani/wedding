@@ -3,3 +3,6 @@
 credentials.json
 diff.diff
 venv
+__pycache__
+config
+*.tsv

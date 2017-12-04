@@ -155,6 +155,19 @@
   font-size: .75em;
 }
 
+#welcome-heading .cta-rsvp {
+  position:fixed;
+  bottom:10px;
+  left:0;
+  width:100%;
+}
+
+#welcome-heading .cta-rsvp a {
+  background-color:#9b4098;
+  color:white;
+  font-weight: bold;
+}
+
 @media (max-width: 600px) {
   .cover {
      background-image:url('../imgs/cover/ldpi-cover.jpg');
@@ -178,6 +191,17 @@
 
   #welcome-heading > div {
     font-size: 16px;
+  }
+
+  #welcome-heading .cta-rsvp {
+    position:unset;
+    bottom:unset;
+    left:unset;
+    width:unset;
+  }
+
+  #welcome-heading .cta-rsvp a {
+    margin-top:10px;
   }
 }
 
@@ -277,6 +301,56 @@
   }
 }
 
+
+/*******
+ * RSVP
+ ******/
+
+#rsvp label {
+  margin-top: 30px;
+}
+
+#rsvp div.checkbox > label, #rsvp div.radio > label {
+  margin-top:0px;
+}
+
+#rsvp input[type="text"], #rsvp input[type="number"], #rsvp input[type="email"], #rsvp textarea {
+  width: 100%;
+  border-style: none;
+  background-color: transparent;
+  border-bottom: 1px solid #b29ddc;
+  padding-bottom: 10px;
+  font-size: 15px;
+  display: inline-block;
+  outline: none;
+  font-weight: 200;
+}
+
+#rsvp textarea {
+  padding: 5px 0 0 10px;
+  min-height: 150px;
+  box-shadow: 1px 1px 1px 1px;
+}
+
+#rsvp label {
+  margin-bottom: 0;
+}
+
+#rsvp .radio {
+  margin:0;
+}
+
+#rsvp .guest-card {
+  padding: 10px;
+  box-shadow: 1px 1px 1px 1px;
+  margin: 15px;
+  display: inline-block;
+  cursor: pointer;
+}
+
+#rsvp .guest-card:active {
+  box-shadow: inset 1px 1px 1px 1px;
+}
 
 /*******
  * Thanks
