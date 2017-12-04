@@ -21,11 +21,11 @@ def execute_query(query, *args, **kwargs):
 
 INSERT_RSVP = """
 INSERT INTO rsvp (
-    hash, name, num_adults, num_children, email, is_attending, is_veg, mehndi,
+    hash, name, num_adults, num_children, email, is_attending, num_veg, num_non_veg, mehndi,
     sangeet, wedding, reception, message, is_valid, guest_id
 ) VALUES (
     encode(digest(concat(cast(current_timestamp as text), random()::text), 'sha512'), 'base64'),
-    :name, :num_adults, :num_children, :email, :is_attending, :is_veg, :mehndi, :sangeet,
+    :name, :num_adults, :num_children, :email, :is_attending, :num_veg, :num_non_veg, :mehndi, :sangeet,
     :wedding, :reception, :message, :is_valid, :guest_id
 )
 RETURNING hash;
@@ -37,7 +37,7 @@ FROM guest
 WHERE hash = :hash
 """
 
-def _validate(guest, name, num_adults, num_children, email, is_attending, is_veg, events, message):
+def _validate(guest, name, num_adults, num_children, email, is_attending, num_veg, num_non_veg, events, message):
     errors = []
     if not name:
       errors.append('Missing name')
@@ -56,8 +56,8 @@ def _validate(guest, name, num_adults, num_children, email, is_attending, is_veg
         if not events:
             errors.append('No events have been selected')
 
-        if is_veg is None:
-            errors.append('Please select whether you are Vegetarian or not')
+        if not num_veg and not num_non_veg:
+            errors.append('Please indicate how many in your party are Vegetarian or not')
     elif events or is_attending is None:
         errors.append("You must choose to either decline or attend")
 
@@ -68,7 +68,7 @@ def _validate(guest, name, num_adults, num_children, email, is_attending, is_veg
 
     return errors
 
-def save(guest_hash, name, num_adults, num_children, email, is_attending, is_veg, events, message):
+def save(guest_hash, name, num_adults, num_children, email, is_attending, num_veg, num_non_veg, events, message):
     guest = None
     guest_id = None
     if guest_hash:
@@ -78,7 +78,7 @@ def save(guest_hash, name, num_adults, num_children, email, is_attending, is_veg
         except Exception as e:
             LOG.error(e)
 
-    err_msgs = _validate(guest, name, num_adults, num_children, email, is_attending, is_veg, events, message)
+    err_msgs = _validate(guest, name, num_adults, num_children, email, is_attending, num_veg, num_non_veg, events, message)
 
     success = 0
     try:
@@ -95,7 +95,8 @@ def save(guest_hash, name, num_adults, num_children, email, is_attending, is_veg
             reception='reception' in events,
             message=message.strip() or None,
             is_valid=not err_msgs,
-            is_veg=is_veg,
+            num_veg=num_veg,
+            num_non_veg=num_non_veg,
             guest_id=guest_id,
         ).fetchone()
         if row_hash:

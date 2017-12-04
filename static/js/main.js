@@ -261,6 +261,19 @@ $(document).ready(function () {
     });
   };
 
+  function parseIntAndSum() {
+    var value = 0;
+    for (var i = 0; i < arguments.length; i++) {
+      try {
+        var num = parseInt(arguments[i]);
+        if (!isNaN(num)) {
+          value += num;
+        }
+      } catch(e){}
+    }
+    return value;
+  }
+
   RsvpForm.prototype.validate = function (data) {
     var errors = [];
     if (!data.name) {
@@ -280,8 +293,14 @@ $(document).ready(function () {
         errors.push('Please limit your RSVP to ' + this.guest.max_num_children + ' children');
       }
 
-      if (!data.food) {
-        errors.push('Please select whether you are Vegetarian or not');
+      var foodCnt = parseIntAndSum(data.num_veg, data.num_non_veg);
+      if (!foodCnt) {
+        errors.push('Please indicate how many in your party are Vegetarian or not');
+      } else {
+        var rsvpCnt = parseIntAndSum(data.adultCount, data.childCount);
+        if (foodCnt !== rsvpCnt) {
+          errors.push('Out of ' + rsvpCnt + ' guests, you have specified dietary restrictions for ' + foodCnt);
+        }
       }
     }
 

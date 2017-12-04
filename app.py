@@ -34,7 +34,8 @@ def saveRsvp():
     'email': cleanStr,
     'decline': strToBool,
     'message': cleanStr,
-    'food': cleanStr,
+    'num_veg': strToNum,
+    'num_non_veg': strToNum,
     'guestHash': cleanStr,
     **event_fields,
   }
@@ -42,7 +43,6 @@ def saveRsvp():
   data = {key: fields[key](val) for key, val in request_data.items() if key in fields}
   events = set([f for f in event_fields if data.get(f)])
   is_attending = not data.get('decline')
-  is_veg = data.get('food') != 'nonVeg'
 
   params = (
     data.get('guestHash'),
@@ -51,7 +51,8 @@ def saveRsvp():
     data.get('childCount'),
     data.get('email'),
     is_attending,
-    is_veg,
+    data.get('num_veg'),
+    data.get('num_non_veg'),
     events,
     data.get('message')
   )
