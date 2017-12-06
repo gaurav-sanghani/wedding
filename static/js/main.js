@@ -295,7 +295,7 @@ $(document).ready(function () {
 
       var foodCnt = parseIntAndSum(data.num_veg, data.num_non_veg);
       if (!foodCnt) {
-        errors.push('Please indicate how many in your party are Vegetarian or not');
+        errors.push("Please indicate your party's meal preferences");
       } else {
         var rsvpCnt = parseIntAndSum(data.adultCount, data.childCount);
         if (foodCnt !== rsvpCnt) {

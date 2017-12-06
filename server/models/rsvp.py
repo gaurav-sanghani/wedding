@@ -57,7 +57,7 @@ def _validate(guest, name, num_adults, num_children, email, is_attending, num_ve
             errors.append('No events have been selected')
 
         if not num_veg and not num_non_veg:
-            errors.append('Please indicate how many in your party are Vegetarian or not')
+            errors.append("Please indicate your party's meal preferences")
     elif events or is_attending is None:
         errors.append("You must choose to either decline or attend")
 
