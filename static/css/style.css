@@ -16,7 +16,7 @@
 
 .section {
   background-color: white;
-  font-family: 'Helvetica Neue';,Helvetica,Arial,sans-serif;
+  font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif;
   font-weight: normal;
   padding-top: 20px;
   padding-bottom: 20px;
@@ -54,6 +54,15 @@
   display: inline-block;
 }
 
+.background-image {
+  background-attachment: fixed;
+  background-repeat: no-repeat;
+  background-size: cover;
+  margin: 0 auto;
+  padding: 0;
+  width:100%;
+}
+
 /******
  * Font Settings
  *****/
@@ -78,6 +87,11 @@
   #navbar {
     /* to prevent the navbar from spilling onto a second line */
     font-size: 15px;
+  }
+
+  #navbar li > a {
+    padding-left:10px;
+    padding-right:10px;
   }
 }
 
@@ -115,17 +129,16 @@
  * End navbar
  *****/
 
+/*********
+ * Welcome
+ ********/
+
 #container {
   width:100%;
 }
 
 .cover {
-  background-attachment:fixed;
   background-position: 80%;
-  background-repeat:no-repeat;
-  background-size:cover;
-  margin: 0 auto;
-  width:100%;
   height:100%;
 }
 
@@ -205,28 +218,55 @@
   }
 }
 
-@media (min-width: 601px) and (max-width: 1280px) {
-  .cover {
-     background-image:url('../imgs/cover/mdpi-cover.jpg');
-  }
+/**********
+ * About Us
+ *********/
+#our-story > .row {
+  margin-top:50px;
 }
 
-@media (min-width: 1281px) and (max-width: 1620px) {
-  .cover {
-     background-image:url('../imgs/cover/hdpi-cover.jpg');
-  }
+#our-story img {
+  width: 125px;
 }
 
-@media (min-width: 1621px) {
-  .cover {
-     background-image:url('../imgs/cover/xhdpi-cover.jpg');
-  }
+#our-story .lead {
+  color:#777;
+  font-size:14px;
 }
 
+#our-story .radhika-section {
+  border-right: 1px solid silver;
+}
+
+#our-story .story-details {
+  font-weight: 300;
+  text-align: center;
+}
+
+#our-story .story-details > div {
+  box-shadow: 0px -5px 13px 0px #e7e7e7;
+  padding: 35px;
+}
 
 /*******
- * Accommodations
- *******/
+ * Wedding Details
+ ******/
+
+#wedding {
+  background-image: url('../imgs/ldpi/venue.jpg');
+  background-position-y:30%;
+  padding:0;
+}
+
+#wedding > .white-background {
+  background-color: rgba(255, 255, 255, 0.75);
+  padding: 20px 0;
+}
+
+#wedding .section-heading {
+  color:#555;
+}
+
 
 /*******
  * Travel
@@ -259,12 +299,8 @@
  ******/
 #countdown {
   background-image: url('../imgs/hearts.jpg');
-  background-attachment: fixed;
-  background-repeat: no-repeat;
-  background-size: cover;
   height: 50%;
   background-position: bottom;
-  padding: 0;
 }
 
 #countdown > div {
@@ -358,18 +394,14 @@
  ******/
 
 #thanks {
-  background-attachment: fixed;
   background-image: url('../imgs/walking-on-the-beach.jpg');
   background-position: 25%;
-  background-repeat: no-repeat;
-  background-size: cover;
   color: #fff;
   font-family: 'Poiret One';
   font-size: 30px;
   font-weight: bold;
   height: 80%;
   text-align: center;
-  width: 100%;
 }
 
 #thanks > div {
@@ -402,6 +434,40 @@
 }
 
 
+/**********************************
+ * Size images based on screen size
+ *********************************/
+@media (min-width: 601px) and (max-width: 1280px) {
+  .cover {
+     background-image:url('../imgs/cover/mdpi-cover.jpg');
+  }
+
+  #wedding {
+     background-image:url('../imgs/mdpi/venue.jpg');
+  }
+}
+
+@media (min-width: 1281px) and (max-width: 1620px) {
+  .cover {
+     background-image:url('../imgs/cover/hdpi-cover.jpg');
+  }
+
+  #wedding {
+     background-image:url('../imgs/hdpi/venue.jpg');
+  }
+}
+
+@media (min-width: 1621px) {
+  .cover {
+     background-image:url('../imgs/cover/xhdpi-cover.jpg');
+  }
+
+  #wedding {
+     background-image:url('../imgs/xhdpi/venue.jpg');
+  }
+}
+
+
 /******
  * Utilities
  * They override everything else
@@ -428,6 +494,14 @@
 
 .grey {
   color:#777;
+}
+
+.maroon {
+  color:#500000;
+}
+
+.burnt-orange {
+  color:#bf5700;
 }
 
 .clickable {
