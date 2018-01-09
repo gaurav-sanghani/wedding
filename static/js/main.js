@@ -119,6 +119,7 @@ $(document).ready(function () {
     });
   }
 
+
   function Rsvp() {
     this.$submit = $('#rsvp-button');
     this.$rsvpError =  $('#rsvp-error');
